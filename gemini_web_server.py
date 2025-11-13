@@ -7,10 +7,10 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import google.generativeai as genai
 from datetime import datetime, timedelta
-import numpy as np
 import json
 import threading
 import os
+import random
 
 app = Flask(__name__)
 CORS(app)
@@ -32,7 +32,7 @@ def generate_bitcoin_data():
     prices = []
     
     for i in range(24):
-        price = 43000 + np.random.uniform(-2000, 2000)
+        price = 43000 + random.uniform(-2000, 2000)
         prices.append(round(price, 2))
     
     bitcoin_data_cache = {
@@ -40,7 +40,7 @@ def generate_bitcoin_data():
         'highest_24h': max(prices),
         'lowest_24h': min(prices),
         'average_24h': round(sum(prices) / len(prices), 2),
-        'volatility': round(np.std(prices), 2),
+        'volatility': round(((max(prices) - min(prices)) / min(prices)) * 100, 2),
         'prices_history': prices,
         'timestamp': now.isoformat()
     }
@@ -132,7 +132,7 @@ def predict_price():
             'hour': h + 1,
             'predicted_high': max_price,
             'predicted_low': min_price,
-            'confidence': 75 + np.random.randint(-10, 10)
+            'confidence': 75 + random.randint(-10, 10)
         })
     
     return jsonify({
