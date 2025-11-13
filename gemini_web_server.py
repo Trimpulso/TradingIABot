@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import json
 import threading
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -159,8 +160,14 @@ if __name__ == '__main__':
     print("=" * 70)
     print("🚀 SERVIDOR WEB - TRADING IA BOT CHATBOT")
     print("=" * 70)
-    print("\nServidor corriendo en: http://127.0.0.1:5000")
-    print("Frontend: http://127.0.0.1:5000")
+    
+    # Detectar puerto de Railway o usar puerto local
+    port = int(os.environ.get('PORT', 5000))
+    host = '0.0.0.0' if os.environ.get('RAILWAY_ENVIRONMENT') else '127.0.0.1'
+    
+    print(f"\nServidor corriendo en: http://{host}:{port}")
+    print(f"Frontend: http://{host}:{port}")
+    
     print("\nEndpoints disponibles:")
     print("  - POST /api/chat - Enviar mensaje al chatbot")
     print("  - GET /api/bitcoin/price - Obtener precio de Bitcoin")
@@ -168,4 +175,6 @@ if __name__ == '__main__':
     print("  - GET /api/conversation/<session_id> - Ver historial")
     print("\n" + "=" * 70 + "\n")
     
-    app.run(debug=True, port=5000, host='127.0.0.1')
+    # Usar debug=False en producción
+    debug_mode = not os.environ.get('RAILWAY_ENVIRONMENT')
+    app.run(debug=debug_mode, port=port, host=host)
