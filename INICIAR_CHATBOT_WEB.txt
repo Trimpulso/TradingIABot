@@ -1,0 +1,275 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                           ┃
+┃  🚀 CÓMO INICIAR EL CHATBOT WEB DEL TRADING IA BOT                       ┃
+┃                                                                           ┃
+┃  Guía paso a paso para ejecutar el servidor web (5 minutos máximo)       ┃
+┃                                                                           ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+
+⏱️  TIEMPO TOTAL: ~3 minutos
+
+
+PASO 1: Abre PowerShell
+═══════════════════════════════════════════════════════════════════════════════
+
+Windows 11/10:
+  1. Presiona: Windows + R
+  2. Escribe: powershell
+  3. Presiona: Enter
+
+O alternativamente:
+  1. Abre el Menú Inicio
+  2. Escribe: PowerShell
+  3. Haz clic en: Windows PowerShell
+
+
+PASO 2: Navega a la carpeta del proyecto
+═══════════════════════════════════════════════════════════════════════════════
+
+En PowerShell, copia y pega:
+
+  cd "C:\github\Trading IA Bot"
+
+Presiona Enter.
+
+
+PASO 3: Activa el ambiente virtual de Python
+═══════════════════════════════════════════════════════════════════════════════
+
+Copia y pega:
+
+  .\.venv\Scripts\Activate.ps1
+
+Presiona Enter.
+
+✓ Verifica que ves esto al inicio del prompt:
+  (.venv) C:\github\Trading IA Bot>
+
+
+PASO 4: Inicia el servidor web
+═══════════════════════════════════════════════════════════════════════════════
+
+Copia y pega:
+
+  python gemini_web_server.py
+
+Presiona Enter.
+
+✓ Deberías ver esto:
+
+  ======================================================================
+  🚀 SERVIDOR WEB - TRADING IA BOT CHATBOT
+  ======================================================================
+  
+  Servidor corriendo en: http://127.0.0.1:5000
+  Frontend: http://127.0.0.1:5000
+
+
+PASO 5: Abre tu navegador
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Abre tu navegador favorito (Chrome, Edge, Firefox, etc.)
+
+2. En la barra de direcciones, copia y pega:
+   http://127.0.0.1:5000
+
+3. Presiona Enter
+
+✓ Deberías ver la interfaz del chatbot con:
+  - Panel de chat a la izquierda
+  - Análisis de Bitcoin a la derecha
+  - Indicador verde "Servidor en línea" 🟢
+
+
+PASO 6: ¡Comienza a chatear!
+═══════════════════════════════════════════════════════════════════════════════
+
+En la caja de texto, escribe tus preguntas:
+
+Ejemplos:
+  • "¿Cuál es el precio de Bitcoin?"
+  • "¿Cuál fue el máximo y mínimo hoy?"
+  • "¿Debería comprar Bitcoin?"
+  • "Predice el precio para la próxima hora"
+  • "Dame un análisis técnico de Bitcoin"
+  • "¿Cuáles son los niveles de soporte?"
+
+Presiona Enter o haz clic en "Enviar" ➤
+
+
+🎉 ¡YA ESTÁ! Tu chatbot está funcionando
+═══════════════════════════════════════════════════════════════════════════════
+
+El chatbot:
+  ✓ Te responde sobre Bitcoin en tiempo real
+  ✓ Muestra datos de precio, máximo, mínimo, volatilidad
+  ✓ Hace predicciones horarias
+  ✓ Guarda el historial automáticamente
+
+
+⏹️  DETENER EL SERVIDOR
+═══════════════════════════════════════════════════════════════════════════════
+
+Para parar el servidor:
+  1. Ve a la ventana de PowerShell
+  2. Presiona: Ctrl + C
+  3. Verás: "KeyboardInterrupt - Servidor detenido"
+
+
+🔄 REINICIAR EL SERVIDOR
+═══════════════════════════════════════════════════════════════════════════════
+
+Para reiniciar sin cerrar PowerShell:
+  1. Presiona: Ctrl + C
+  2. Espera 2 segundos
+  3. Vuelve a ejecutar: python gemini_web_server.py
+
+
+💻 ACCEDER DESDE OTRO DISPOSITIVO
+═══════════════════════════════════════════════════════════════════════════════
+
+Para acceder desde otro dispositivo en tu red local:
+  1. Encuentra tu IP local (en PowerShell):
+     ipconfig
+  
+  2. Busca la dirección IPv4 (ejemplo: 192.168.1.100)
+  
+  3. En otro dispositivo, abre en navegador:
+     http://192.168.1.100:5000
+
+
+⚡ ATAJO: Iniciar en un clic (Windows)
+═══════════════════════════════════════════════════════════════════════════════
+
+Para iniciar el servidor sin usar terminal:
+
+1. Haz doble clic en: start_web_server.bat
+2. Se abrirá una ventana de PowerShell automáticamente
+3. El servidor se iniciará solo
+4. Abre: http://127.0.0.1:5000 en tu navegador
+
+
+🐛 SOLUCIÓN DE PROBLEMAS
+═══════════════════════════════════════════════════════════════════════════════
+
+❌ Problema: "No se puede conectar"
+   ✓ Solución: 
+     - Verifica que PowerShell esté mostrando el servidor activo
+     - Espera 5 segundos después de iniciar
+     - Recarga la página (Ctrl + R)
+     - Prueba en otro navegador
+
+❌ Problema: "Puerto 5000 ya está en uso"
+   ✓ Solución:
+     - Cierra otras aplicaciones que usen el puerto
+     - O edita gemini_web_server.py y cambia:
+       app.run(debug=True, port=5001, ...)
+     - Accede a: http://127.0.0.1:5001
+
+❌ Problema: "ModuleNotFoundError: flask"
+   ✓ Solución:
+     - En PowerShell, corre:
+       python -m pip install flask flask-cors
+     - Reinicia el servidor
+
+❌ Problema: "Respuestas genéricas del chatbot"
+   ✓ Nota: Usamos respuestas mock para no depender de la API Key
+     Para usar la API real de Gemini, actualiza:
+     - gemini_web_server.py línea 53
+     - Reemplaza las respuestas mock con llamadas reales
+
+
+📊 CARACTERÍSTICAS DEL INTERFAZ
+═══════════════════════════════════════════════════════════════════════════════
+
+PANEL IZQUIERDO - Chat:
+  ✓ Historial de mensajes
+  ✓ Cuadro de entrada de texto
+  ✓ Botón "Enviar"
+  ✓ Botón "Limpiar Conversación"
+
+PANEL DERECHO - Análisis:
+  ✓ Datos actuales de Bitcoin
+    - Precio
+    - Máximo 24h
+    - Mínimo 24h
+    - Promedio
+    - Volatilidad
+  
+  ✓ Predicciones por hora
+    - Máximo predicho
+    - Mínimo predicho
+    - Nivel de confianza
+
+
+🔧 PERSONALIZACIÓN
+═══════════════════════════════════════════════════════════════════════════════
+
+Cambiar el puerto:
+  Edita gemini_web_server.py (línea final):
+  app.run(debug=True, port=5001, host='127.0.0.1')
+
+Cambiar la API Key:
+  Edita gemini_web_server.py (línea 15):
+  API_KEY = "Tu_nueva_API_Key"
+
+Cambiar respuestas:
+  Edita gemini_web_server.py (función chat)
+  Modifica el diccionario "responses"
+
+
+📚 DOCUMENTACIÓN ADICIONAL
+═══════════════════════════════════════════════════════════════════════════════
+
+Para información más detallada:
+  • README_FINAL.md - Guía completa
+  • GUIA_CHATBOT_WEB.md - Guía técnica del web
+  • INSTRUCCIONES_FINALES.txt - Instrucciones en español
+
+
+✅ CHECKLIST FINAL
+═══════════════════════════════════════════════════════════════════════════════
+
+Antes de empezar, verifica:
+
+  ☑ Python 3.14 instalado
+  ☑ Carpeta del proyecto: C:\github\Trading IA Bot
+  ☑ Archivo gemini_web_server.py existe
+  ☑ Carpeta templates/ existe
+  ☑ Flask instalado (pip list | findstr flask)
+  ☑ Ambiente virtual activo (.venv)
+
+
+🎯 PRÓXIMOS PASOS
+═══════════════════════════════════════════════════════════════════════════════
+
+Después de probar el chatbot:
+
+1. Prueba el CHATBOT TERMINAL:
+   python chatbot_terminal.py
+
+2. Abre el JUPYTER NOTEBOOK:
+   jupyter notebook
+
+3. Ejecuta BACKTESTS automáticos:
+   freqtrade backtest -s MyMlStrategy
+
+4. Lee la DOCUMENTACIÓN completa:
+   README_FINAL.md
+
+5. Explora el REPOSITORIO:
+   https://github.com/Trimpulso/TradingIABot
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+¿Necesitas ayuda? Revisa:
+  1. Los archivos .md de documentación
+  2. El código fuente (gemini_web_server.py)
+  3. Los comentarios en el código
+  4. El archivo test_chatbot.py para ejemplos
+
+¡Que disfrutes tu Trading IA Bot! 🚀
+
+═══════════════════════════════════════════════════════════════════════════════
