@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: 📥 Checkout código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🐍 Setup Python 3.9
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.9'
           cache: 'pip'
@@ -23,7 +23,7 @@ jobs:
       - name: 📦 Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements-lite.txt
 
       - name: 📊 Generar reporte de análisis
         run: |
@@ -110,7 +110,7 @@ jobs:
           EOF
 
       - name: 💾 Guardar reportes
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: weekly-reports
           path: reports/
