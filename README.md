@@ -1,4 +1,4 @@
-# 🤖 Trading IA Bot - Machine Learning + Freqtrade
+# 🤖 v - Machine Learning + Freqtrade
 
 Un bot de trading automático impulsado por Machine Learning, construido con **Freqtrade** para el trading de criptomonedas con lógica inteligente de compra/venta.
 

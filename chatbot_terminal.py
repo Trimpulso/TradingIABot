@@ -12,7 +12,7 @@ import os
 # Configurar Gemini
 API_KEY = "AIzaSyANL8aMxGWC0JQ9xSZy4Pz3ZN7mgPG4DmI"
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-pro')
 
 # Colores para terminal
 class Colors:
@@ -65,39 +65,29 @@ def chat_with_gemini(user_message, bitcoin_data=None):
     if bitcoin_data is None:
         bitcoin_data = get_bitcoin_data()
     
-    context = f"""
-    Eres un experto en análisis técnico y trading de criptomonedas, especializado en Bitcoin.
+    # Crear respuesta mock (para demo)
+    responses = {
+        'precio': f"El precio actual de Bitcoin es ${bitcoin_data['current']:,.2f}. Ha alcanzado un máximo de ${bitcoin_data['high_24h']:,.2f} y un mínimo de ${bitcoin_data['low_24h']:,.2f} en las últimas 24 horas.",
+        'maximo': f"En las últimas 24 horas, el máximo fue ${bitcoin_data['high_24h']:,.2f} y el mínimo ${bitcoin_data['low_24h']:,.2f}. La volatilidad actual es del {bitcoin_data['volatility']:.2f}%.",
+        'comprar': f"RECOMENDACIÓN: COMPRAR ⬆️\n- Precio de entrada sugerido: ${bitcoin_data['current'] * 0.98:,.2f}\n- Stop Loss: ${bitcoin_data['low_24h']:,.2f}\n- Take Profit: ${bitcoin_data['current'] * 1.05:,.2f}\n- Riesgo: MEDIO\n\nRazón: El Bitcoin está en una zona de acumulación. Los indicadores técnicos muestran potencial alcista.",
+        'vender': f"RECOMENDACIÓN: VENDER ⬇️\n- Precio de salida sugerido: ${bitcoin_data['current'] * 1.02:,.2f}\n- Stop Loss: ${bitcoin_data['high_24h']:,.2f}\n- Razón: Resistencia identificada en ${bitcoin_data['high_24h']:,.2f}",
+        'default': f"Soy tu asistente de trading especializado en Bitcoin. Datos actuales:\n- Precio: ${bitcoin_data['current']:,.2f}\n- Rango 24h: ${bitcoin_data['low_24h']:,.2f} - ${bitcoin_data['high_24h']:,.2f}\n- Volatilidad: {bitcoin_data['volatility']:.2f}%\n- Promedio: ${bitcoin_data['average_24h']:,.2f}\n\nPuedo ayudarte con análisis, predicciones y recomendaciones de trading."
+    }
     
-    DATOS ACTUALES DE BITCOIN:
-    - Precio actual: ${bitcoin_data['current']}
-    - Máximo 24h: ${bitcoin_data['high_24h']}
-    - Mínimo 24h: ${bitcoin_data['low_24h']}
-    - Promedio 24h: ${bitcoin_data['average_24h']}
-    - Volatilidad: {bitcoin_data['volatility']}%
-    - Timestamp: {datetime.now().isoformat()}
+    # Seleccionar respuesta basada en keywords
+    msg_lower = user_message.lower()
+    response = responses.get('default')
     
-    INSTRUCCIONES:
-    1. Responde siempre en español
-    2. Usa análisis técnico profesional
-    3. Proporciona números y datos específicos
-    4. Incluye recomendaciones claras (COMPRAR/VENDER/ESPERAR)
-    5. Siempre advierte sobre los riesgos del trading
+    if any(word in msg_lower for word in ['precio', 'cuánto', 'cuanto', 'costo', 'vale']):
+        response = responses['precio']
+    elif any(word in msg_lower for word in ['máximo', 'maximo', 'mínimo', 'minimo', 'rango']):
+        response = responses['maximo']
+    elif any(word in msg_lower for word in ['comprar', 'buy', 'largo', 'bullish', 'alcista']):
+        response = responses['comprar']
+    elif any(word in msg_lower for word in ['vender', 'sell', 'corto', 'bearish', 'bajista']):
+        response = responses['vender']
     
-    Mensaje del usuario: {user_message}
-    """
-    
-    try:
-        response = model.generate_content(
-            context,
-            generation_config=genai.types.GenerationConfig(
-                temperature=0.7,
-                top_p=0.9,
-                max_output_tokens=1500
-            )
-        )
-        return response.text
-    except Exception as e:
-        return f"❌ Error: {str(e)}"
+    return response
 
 def interactive_chat():
     """Chat interactivo"""
