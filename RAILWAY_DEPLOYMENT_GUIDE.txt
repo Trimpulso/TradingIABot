@@ -1,0 +1,315 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║              🚀 DESPLIEGUE EN RAILWAY - GUÍA PASO A PASO                    ║
+║                                                                              ║
+║        Tu Trading IA Bot con URL pública en ~5 minutos                      ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+📋 REQUISITOS
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Repositorio GitHub: https://github.com/Trimpulso/TradingIABot
+✓ Cambios ya hecho: Procfile + requirements.txt
+✓ Código en master branch (Ya pusheado)
+✓ Una cuenta de email (para Railway)
+
+
+🚀 PASO 1: Crear Cuenta en Railway (Gratis)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Abre: https://railway.app
+
+2. Haz clic en: "Start Project" o "Sign Up"
+
+3. Selecciona: "Continue with GitHub"
+   (Si no tienes, puedes crear una cuenta nueva)
+
+4. Autoriza a Railway a acceder a GitHub
+   (Se abrirá una ventana de GitHub)
+
+5. Haz clic en: "Authorize railwayapp"
+
+6. ¡Listo! Ya tienes cuenta en Railway
+
+
+✅ PASO 2: Crear Nuevo Proyecto
+═══════════════════════════════════════════════════════════════════════════════
+
+1. En la pantalla principal de Railway, haz clic en:
+   "+ New Project"
+
+2. Selecciona: "Deploy from GitHub repo"
+
+3. Haz clic en: "Configure GitHub App"
+   (Si es tu primera vez)
+
+4. En GitHub, selecciona:
+   - Organization: Tu usuario (Trimpulso)
+   - Repository access: "Only select repositories"
+   - Selecciona: "TradingIABot"
+
+5. Haz clic en: "Install & Authorize"
+
+
+🔗 PASO 3: Conectar Tu Repositorio
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Vuelve a Railway
+
+2. En la ventana "Deploy from GitHub repo", busca:
+   "TradingIABot"
+
+3. Haz clic en el repositorio
+
+4. Railway automáticamente:
+   ✓ Detecta el Procfile
+   ✓ Lee requirements.txt
+   ✓ Inicia el despliegue
+
+
+⏳ PASO 4: Esperar Despliegue (2-3 minutos)
+═══════════════════════════════════════════════════════════════════════════════
+
+Verás en la pantalla:
+
+  📦 Building...
+  (instalando dependencias)
+  
+  🚀 Deploying...
+  (iniciando el servidor)
+  
+  ✅ Deployment successful!
+  (listo!)
+
+Puedes ver el log en tiempo real. Espera hasta ver:
+
+  Uvicorn running on http://0.0.0.0:PORT
+
+
+✨ PASO 5: Obtener Tu URL Pública
+═══════════════════════════════════════════════════════════════════════════════
+
+1. En la sección superior derecha, busca:
+   "Deployment"
+
+2. Verás un botón azul con tu URL, algo como:
+   
+   https://trading-ia-bot-xxxx.railway.app
+
+3. Haz clic en el icono de copiar o en la URL
+
+4. ¡Esa es tu URL pública! 🎉
+
+
+🌐 PASO 6: ¡Accede a tu Chatbot!
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Copia la URL que obtuviste
+
+2. Abre en tu navegador:
+   https://trading-ia-bot-xxxx.railway.app
+
+3. ¡Verás tu chatbot funcionando! 🚀
+
+4. Puedes compartir este link con cualquiera:
+   - Funciona desde cualquier navegador
+   - Disponible 24/7
+   - Sin necesidad de ejecutar nada localmente
+
+
+🔄 PASO 7: Actualizaciones Automáticas
+═══════════════════════════════════════════════════════════════════════════════
+
+Cada vez que hagas un cambio en GitHub:
+
+1. Haces cambios en tu código local
+2. Haces git commit y git push
+3. Railway AUTOMÁTICAMENTE:
+   ✓ Detecta los cambios
+   ✓ Reinicia el despliegue
+   ✓ Actualiza la URL en segundos
+
+¡Sin necesidad de hacer nada más! ✅
+
+
+📊 ESTRUCTURA DEL DESPLIEGUE
+═══════════════════════════════════════════════════════════════════════════════
+
+Lo que Railway hace:
+
+  GitHub Repository
+        ↓
+  (Detecta cambios)
+        ↓
+  Procfile (lee: python gemini_web_server.py)
+        ↓
+  requirements.txt (instala dependencias)
+        ↓
+  Ejecuta: python gemini_web_server.py
+        ↓
+  Puerto automático: 5000 (Railway lo maneja)
+        ↓
+  URL Pública: https://trading-ia-bot-xxxx.railway.app
+
+
+🔐 VARIABLES DE ENTORNO (Opcional)
+═══════════════════════════════════════════════════════════════════════════════
+
+Si quieres proteger tu API Key (recomendado):
+
+1. En Railway, ve a: "Variables"
+
+2. Haz clic en: "+ Add Variable"
+
+3. Agrega:
+   GEMINI_API_KEY = AIzaSyANL8aMxGWC0JQ9xSZy4Pz3ZN7mgPG4DmI
+
+4. Luego edita gemini_web_server.py:
+   
+   # Antes:
+   API_KEY = "AIzaSyANL8aMxGWC0JQ9xSZy4Pz3ZN7mgPG4DmI"
+   
+   # Después:
+   API_KEY = os.environ.get('GEMINI_API_KEY', 'default_key')
+
+5. Haz git push
+   → Railway automáticamente redeploya con la nueva config
+
+
+🔗 COMPARTIR TU CHATBOT
+═══════════════════════════════════════════════════════════════════════════════
+
+Ya puedes compartir tu URL con:
+
+  ✓ Amigos y familia
+  ✓ Colegas de trabajo
+  ✓ En redes sociales
+  ✓ En tu portfolio
+  ✓ Anywhere! 🌍
+
+
+Ejemplo de mensaje:
+─────────────────────────────────────────────────────────
+
+"Mira mi Trading IA Bot con Chatbot Gemini:
+https://trading-ia-bot-xxxx.railway.app
+
+Pregúntale sobre Bitcoin en tiempo real! 🚀"
+
+─────────────────────────────────────────────────────────
+
+
+❌ SOLUCIÓN DE PROBLEMAS
+═══════════════════════════════════════════════════════════════════════════════
+
+"Build failed" / "Deployment failed":
+  → Verifica que Procfile esté en el root
+  → Verifica que requirements.txt tenga todas las dependencias
+  → Revisa el log en Railway para detalles
+
+"Application crashed":
+  → Haz clic en "Logs" en Railway
+  → Busca el error
+  → Corrige en tu código local
+  → git push (Railway redeploya automáticamente)
+
+"Port already in use":
+  → Railway maneja puertos automáticamente
+  → No deberías tener este error
+
+"Cannot import module X":
+  → La dependencia no está en requirements.txt
+  → Agrégala y haz git push
+
+
+📈 MONITOREO
+═══════════════════════════════════════════════════════════════════════════════
+
+Railway te proporciona:
+
+  ✓ Logs en tiempo real
+  ✓ CPU & Memory usage
+  ✓ Request metrics
+  ✓ Histórico de deployments
+
+Todo visible en tu dashboard de Railway.
+
+
+💡 TIPS
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Railway da GRATIS:
+   ✓ 500 MB de memoria
+   ✓ 1 GB de almacenamiento
+   ✓ Ancho de banda ilimitado
+   ✓ Suficiente para tu chatbot
+
+2. Si necesitas más recursos:
+   → Puedes actualizar a Plan pago ($5-20/mes)
+
+3. El despliegue es casi instantáneo:
+   → 2-3 minutos típicamente
+
+4. Railway se integra con GitHub:
+   → No necesitas configurar webhooks
+   → Todo automático
+
+
+📞 SOPORTE
+═══════════════════════════════════════════════════════════════════════════════
+
+Si algo sale mal:
+
+1. Revisa Railway Docs: https://docs.railway.app
+
+2. Revisa el log completo en Railway Dashboard
+
+3. Verifica que:
+   ✓ Procfile está correcto
+   ✓ requirements.txt tiene todas las deps
+   ✓ gemini_web_server.py es válido
+
+4. Intenta un redeploy:
+   → En Railway, busca "Redeploy" o vuelve a hacer git push
+
+
+✅ CHECKLIST FINAL
+═══════════════════════════════════════════════════════════════════════════════
+
+Antes de desplegar:
+
+  ☑ Tienes cuenta en Railway
+  ☑ GitHub conectado a Railway
+  ☑ Procfile está en el repo
+  ☑ requirements.txt actualizado
+  ☑ Código en master branch pusheado
+  ☑ gemini_web_server.py configurado para producción
+
+
+🎉 RESULTADO FINAL
+═══════════════════════════════════════════════════════════════════════════════
+
+Después de completar estos pasos:
+
+  ✅ Tu chatbot está corriendo en la nube
+  ✅ Tienes una URL pública permanente
+  ✅ Cualquiera puede acceder desde cualquier lugar
+  ✅ Se actualiza automáticamente con cada push a GitHub
+  ✅ Gratis 🎉
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Ya está todo preparado. Solo necesitas:
+
+1. Ir a: https://railway.app
+2. Sign in with GitHub
+3. New Project → Deploy from GitHub
+4. Seleccionar TradingIABot
+5. ¡Esperar 2-3 minutos!
+6. Copiar tu URL
+7. ¡Compartir! 🚀
+
+═══════════════════════════════════════════════════════════════════════════════
