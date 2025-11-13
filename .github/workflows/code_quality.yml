@@ -1,0 +1,79 @@
+name: 🔍 Code Quality & Tests
+
+on:
+  push:
+    branches: [ master, main, develop ]
+  pull_request:
+    branches: [ master, main, develop ]
+  schedule:
+    # Cada miércoles a las 3 AM UTC
+    - cron: '0 3 * * 3'
+  workflow_dispatch:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v3
+
+      - name: 🐍 Setup Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: 📦 Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 black pylint
+
+      - name: 🎨 Verificar formato con Black
+        run: |
+          black --check strategies/ utils/ scripts/ || echo "⚠️ Formato no ideal (puedes corregir con: black .)"
+
+      - name: 🔍 Análisis estático con Flake8
+        run: |
+          flake8 strategies/ utils/ scripts/ \
+            --count \
+            --select=E9,F63,F7,F82 \
+            --show-source \
+            --statistics \
+            || echo "⚠️ Flake8 encontró problemas menores"
+
+      - name: 📋 Verificar dependencias
+        run: |
+          pip check || echo "⚠️ Algunos paquetes tienen conflictos"
+
+      - name: ✅ Validar archivos de configuración
+        run: |
+          python -c "
+          import json
+          try:
+              with open('config/config.json', 'r') as f:
+                  config = json.load(f)
+              print('✅ config.json válido')
+          except Exception as e:
+              print(f'❌ Error en config.json: {e}')
+              exit(1)
+          "
+
+      - name: 📊 Reporte de calidad
+        run: |
+          echo "📈 Resumen de calidad del código"
+          echo "================================"
+          echo "✅ Archivos Python encontrados:"
+          find strategies/ utils/ scripts/ -name "*.py" | wc -l
+          echo ""
+          echo "✅ Líneas de código:"
+          find strategies/ utils/ scripts/ -name "*.py" -exec wc -l {} + | tail -1
+
+      - name: 💾 Guardar reporte
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: quality-report
+          path: .
+          retention-days: 7

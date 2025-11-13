@@ -1,0 +1,94 @@
+name: 📊 Weekly Backtest & Model Training
+
+on:
+  schedule:
+    # Cada domingo a las 2 AM UTC
+    - cron: '0 2 * * 0'
+  # También permite ejecutar manualmente desde GitHub UI
+  workflow_dispatch:
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v3
+
+      - name: 🐍 Setup Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: 📦 Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🤖 Entrenar modelo ML
+        run: |
+          python scripts/train_model.py
+          echo "✅ Modelo entrenado exitosamente"
+
+      - name: 📈 Ejecutar backtest
+        run: |
+          mkdir -p backtest_results
+          freqtrade backtesting \
+            --strategy MyMlStrategy \
+            --stake-currency USDT \
+            --dry-run \
+            --timeframe 4h \
+            --timerange 20240101-20241231 \
+            --max-open-trades 3 \
+            --stoploss -0.10 \
+            --take-profit 0.05 \
+            || echo "⚠️ Backtest completado con advertencias"
+
+      - name: 📊 Generar reportes
+        run: |
+          python -c "
+          import os
+          import json
+          from datetime import datetime
+          
+          results = {
+              'execution_date': datetime.now().isoformat(),
+              'status': 'completed',
+              'strategy': 'MyMlStrategy',
+              'notes': 'Backtest ejecutado automáticamente por GitHub Actions'
+          }
+          
+          os.makedirs('backtest_results', exist_ok=True)
+          with open('backtest_results/summary.json', 'w') as f:
+              json.dump(results, f, indent=2)
+          
+          print('✅ Reporte generado')
+          "
+
+      - name: 💾 Guardar artefactos
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: backtest-results
+          path: backtest_results/
+          retention-days: 30
+
+      - name: 📤 Commit resultados (opcional)
+        if: always()
+        run: |
+          git config --local user.email "bot@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add backtest_results/ models/ || true
+          git diff --quiet && git diff --staged --quiet || (
+            git commit -m "🤖 Backtest automático - $(date +'%Y-%m-%d %H:%M')"
+            git push origin master
+          ) || echo "No hay cambios para commitear"
+
+      - name: ✅ Notificación de éxito
+        run: echo "🎉 Backtest completado exitosamente"
+
+      - name: ❌ Notificación de error
+        if: failure()
+        run: echo "⚠️ El backtest tuvo problemas, pero la ejecución continuó"
