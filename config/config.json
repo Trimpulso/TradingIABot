@@ -1,0 +1,98 @@
+{
+  "max_open_trades": 3,
+  "stake_currency": "USDT",
+  "dry_run": true,
+  "dry_run_wallet": 1000,
+  "tradable_balance_ratio": 0.99,
+  "fiat_display_currency": "USD",
+  "stake_amount": "unlimited",
+  "amount_reserve_percent": 0.05,
+  "exchange": {
+    "name": "binance",
+    "key": "${BINANCE_API_KEY}",
+    "secret": "${BINANCE_API_SECRET}",
+    "pair_whitelist": [
+      "BTC/USDT",
+      "ETH/USDT",
+      "BNB/USDT",
+      "SOL/USDT",
+      "ADA/USDT",
+      "XRP/USDT",
+      "DOGE/USDT",
+      "AVAX/USDT",
+      "MATIC/USDT",
+      "LINK/USDT"
+    ],
+    "pair_blacklist": [
+      "BLX/BTC",
+      "BOME/USDT"
+    ],
+    "ccxt_async_config": {},
+    "ccxt_config": {}
+  },
+  "edge": {
+    "enabled": false,
+    "process_maybe_execute_buy": true,
+    "stoploss_range_disablestoploss": 0.02,
+    "stoploss_range_stoplosses": [
+      -0.02,
+      -0.05,
+      -0.10
+    ]
+  },
+  "telegram": {
+    "enabled": false,
+    "token": "${TELEGRAM_TOKEN}",
+    "chat_id": "${TELEGRAM_CHAT_ID}"
+  },
+  "db_url": "sqlite:///tradesv3.sqlite",
+  "initial_state": "running",
+  "forcebuy_enabled": false,
+  "cancel_open_orders_on_exit": false,
+  "trading_mode": "spot",
+  "margin_mode": "",
+  "backtest": {
+    "wallet": 1000,
+    "max_open_trades": 3,
+    "stake_amount": "unlimited"
+  },
+  "hyperopt": {
+    "max_epochs": 100,
+    "hyperopt_jobs": 4,
+    "hyperopt_random_state": 1,
+    "n_startup_candles": 30,
+    "n_folds": 3,
+    "timerange": null,
+    "space": [
+      "buy",
+      "sell",
+      "roi",
+      "stoploss"
+    ],
+    "spaces": [
+      "buy",
+      "sell",
+      "roi",
+      "stoploss"
+    ],
+    "min_date_candles": 200,
+    "loss_function": "SharpeFitnessObject",
+    "log_results": true,
+    "print_json": false,
+    "print_colorized": true,
+    "print_all": false,
+    "save_trials": false,
+    "trials_storage": "sqlite"
+  },
+  "api_server": {
+    "enabled": false,
+    "listen_ip_address": "127.0.0.1",
+    "listen_port": 8080,
+    "verbosity": "info",
+    "enable_openapi": false,
+    "jwt_secret_key": "your-secret-key-change-this",
+    "CORS_origins": [],
+    "username": "freqtrader",
+    "password": "freqtrader"
+  }
+}
