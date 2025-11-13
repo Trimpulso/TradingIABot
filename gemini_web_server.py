@@ -6,9 +6,7 @@ API REST + Frontend HTML interactivo
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import google.generativeai as genai
-from datetime import datetime, timedelta
-import json
-import threading
+from datetime import datetime
 import os
 import random
 
@@ -20,32 +18,20 @@ API_KEY = "AIzaSyANL8aMxGWC0JQ9xSZy4Pz3ZN7mgPG4DmI"
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-pro')
 
-# Almacenar conversaciones
-conversations = {}
-bitcoin_data_cache = None
-
 def generate_bitcoin_data():
     """Generar datos de Bitcoin para análisis"""
-    global bitcoin_data_cache
-    
     now = datetime.now()
-    prices = []
+    prices = [43000 + random.uniform(-2000, 2000) for _ in range(24)]
     
-    for i in range(24):
-        price = 43000 + random.uniform(-2000, 2000)
-        prices.append(round(price, 2))
-    
-    bitcoin_data_cache = {
-        'current_price': prices[0],
-        'highest_24h': max(prices),
-        'lowest_24h': min(prices),
+    return {
+        'current_price': round(prices[0], 2),
+        'highest_24h': round(max(prices), 2),
+        'lowest_24h': round(min(prices), 2),
         'average_24h': round(sum(prices) / len(prices), 2),
         'volatility': round(((max(prices) - min(prices)) / min(prices)) * 100, 2),
-        'prices_history': prices,
+        'prices_history': [round(p, 2) for p in prices],
         'timestamp': now.isoformat()
     }
-    
-    return bitcoin_data_cache
 
 @app.route('/')
 def index():
@@ -87,16 +73,6 @@ def chat():
             assistant_message = responses['comprar']
         elif any(word in msg_lower for word in ['vender', 'sell', 'corto', 'bearish', 'bajista']):
             assistant_message = responses['vender']
-        
-        # Guardar en historial
-        if session_id not in conversations:
-            conversations[session_id] = []
-        
-        conversations[session_id].append({
-            'timestamp': datetime.now().isoformat(),
-            'user': user_message,
-            'assistant': assistant_message
-        })
         
         return jsonify({
             'response': assistant_message,
@@ -142,37 +118,22 @@ def predict_price():
         'timestamp': datetime.now().isoformat()
     })
 
-@app.route('/api/conversation/<session_id>', methods=['GET'])
-def get_conversation(session_id):
-    """Obtener historial de conversación"""
-    if session_id in conversations:
-        return jsonify(conversations[session_id])
-    return jsonify([])
-
-@app.route('/api/clear/<session_id>', methods=['POST'])
-def clear_conversation(session_id):
-    """Limpiar historial de conversación"""
-    if session_id in conversations:
-        del conversations[session_id]
-    return jsonify({'status': 'cleared'})
-
 if __name__ == '__main__':
     print("=" * 70)
-    print("🚀 SERVIDOR WEB - TRADING IA BOT CHATBOT")
+    print("🚀 TRADING IA BOT - CHATBOT GEMINI")
     print("=" * 70)
     
     # Detectar puerto de Railway o usar puerto local
     port = int(os.environ.get('PORT', 5000))
     host = '0.0.0.0' if os.environ.get('RAILWAY_ENVIRONMENT') else '127.0.0.1'
     
-    print(f"\nServidor corriendo en: http://{host}:{port}")
-    print(f"Frontend: http://{host}:{port}")
+    print(f"\n✅ Servidor corriendo en puerto {port}")
+    print(f"🌐 Frontend: http://{host}:{port}")
     
-    print("\nEndpoints disponibles:")
-    print("  - POST /api/chat - Enviar mensaje al chatbot")
-    print("  - GET /api/bitcoin/price - Obtener precio de Bitcoin")
-    print("  - GET /api/bitcoin/prediction - Predicción de máximos/mínimos")
-    print("  - GET /api/conversation/<session_id> - Ver historial")
+    print("\n📡 API Endpoints:")
+    print("  • POST /api/chat - Chat con Gemini")
+    print("  • GET /api/bitcoin/price - Precio actual")
+    print("  • GET /api/bitcoin/prediction - Predicciones")
     print("\n" + "=" * 70 + "\n")
     
     # Usar debug=False en producción
